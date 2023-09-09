@@ -45,5 +45,6 @@ dnf install mysql -y &>>$log_file
 start_check
 
 echo load mysql schema
-mysql -h mysql.sddevops18.online -uroot -pExpenseApp@1 < /app/schema/backend.sql &>>$log_file
+mysql_root_password=$1
+mysql -h mysql.sddevops18.online -uroot -p$mysql_root_password < /app/schema/backend.sql &>>$log_file
 start_check
