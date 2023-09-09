@@ -1,22 +1,38 @@
-curl -sL https://rpm.nodesource.com/setup_lts.x | bash
-dnf install nodejs -y
-useradd expense
+log_file=/tmp/expense.log
 
-cp backend.service /etc/systemd/system/backend.service
-rm -rf /app
+echo install NodeJS repos
+curl -sL https://rpm.nodesource.com/setup_lts.x | bash >>$log_file
+
+echo Install NodeJS
+dnf install nodejs -y >>$log_file
+
+echo copy backend service file
+cp backend.service /etc/systemd/system/backend.service >>$log_file
+
+echo Add Application User
+useradd expense >>$log_file
+
+echo clean app content
+rm -rf /app >>$log_file
 mkdir /app 
 
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip 
+echo Download app content
+curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip >>$log_file
 cd /app 
-unzip /tmp/backend.zip
 
-npm install 
+echo extract app content
+unzip /tmp/backend.zip >>$log_file
 
-systemctl daemon-reload
+echo Download dependencies
+npm install >>$log_file
 
-systemctl enable backend 
-systemctl start backend
+echo start backend service
+systemctl daemon-reload >>$log_file
+systemctl enable backend >>$log_file
+systemctl start backend >>$log_file
 
-dnf install mysql -y 
+echo Install mysql client
+dnf install mysql -y >>$log_file
 
-mysql -h mysql.sddevops18.online -uroot -pExpenseApp@1 < /app/schema/backend.sql 
+echo load mysql schema
+mysql -h mysql.sddevops18.online -uroot -pExpenseApp@1 < /app/schema/backend.sql >>$log_file
