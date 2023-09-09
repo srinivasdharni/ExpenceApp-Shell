@@ -17,7 +17,7 @@ rm -rf /app >>$log_file
 mkdir /app 
 
 echo Download app content
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip >>$log_file
+curl -s -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip >>$log_file
 cd /app 
 
 echo extract app content
